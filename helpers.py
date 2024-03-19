@@ -21,5 +21,3 @@ def process_frame(depth_buf, amplitude_buf):
 #         # Scale vibration intensity based on distance
 #         intensity = (1 - distance / MAX_DISTANCE) * 100  # Convert to duty cycle (0-100%)
 #         motors[motor_index].ChangeDutyCycle(intensity)
-
-# Exponential distance strength adjustment

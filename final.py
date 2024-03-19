@@ -8,14 +8,14 @@ import threading
 
 from helpers import *
 from constants import *
-import Motor
+from Motor import Motor
 
 class Project:
     def __init__(self, motor_pins, button_pin):
         self.running_thread = None
         self.is_running = threading.Event()
-        self.setup_components(motor_pins, button_pin)
         self.motors = []
+        self.setup_components(motor_pins, button_pin)
 
         # FOR TEST
         self.distances = [4,3,2,0.5]
@@ -28,7 +28,9 @@ class Project:
         GPIO.setup(motor_pins, GPIO.OUT)
         GPIO.setup(button_pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
         for i in range(TOTAL_MOTORS):
-            self.motors.append(Motor(GPIO.PWM(motor_pins[i], 100)))
+            motor = Motor(GPIO.PWM(motor_pins[i], 100), 0)
+            # self.motors.append(Motor(GPIO.PWM(motor_pins[i], 100), 0))
+            self.motors.append(motor)
         # self.motors = [GPIO.PWM(motor_pins[0], 100), GPIO.PWM(motor_pins[1], 100), GPIO.PWM(motor_pins[2], 100), GPIO.PWM(motor_pins[3], 100)]
         GPIO.add_event_detect(button_pin, GPIO.FALLING, callback = self.toggle_start, bouncetime = 100)
 
@@ -71,7 +73,7 @@ class Project:
             #         section = depth_buf[:, start_x:end_x]
             #         section_depth = np.nanmean(np.where(section == 0, np.nan, section))
             #         # cv2.putText(result_image, f"{i}: {section_depth:.1f}m", (start_x + 10, frame_height//2), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1)
-            #         self.motors[i].adjust_motor_vibration(section_depth)
+            #         self.motors[i].update(section_depth)
 
             #         # Calculate the vibration intensity for visual representation
             #         if section_depth < 0.1 or section_depth > MAX_DISTANCE:
@@ -91,13 +93,15 @@ class Project:
 
 
             # FOR TEST -- NEED TO REMOVE
-            for j in range(len(self.distances)):
-                print("Distance is {}".format(self.distances[j]))
-                for motor in self.motors:
-                    motor.pin.adjust_motor_vibration(self.distances[j])
+            # for j in range(len(self.distances)):
+            #     # print("Distance is {}".format(self.distances[j]))
+            #     for motor in self.motors:
+            #         motor.update(self.distances[j])
 
-            # adjust_motor_vibration(self.distances[3], self.motors, 0)
-            # adjust_motor_vibration(self.distances[1], self.motors, 3)
+            self.motors[0].update(self.distances[3])
+
+            # update(self.distances[3], self.motors, 0)
+            # update(self.distances[1], self.motors, 3)
             # time.sleep(100)
             # END OF TEST
 

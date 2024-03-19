@@ -16,16 +16,14 @@ GPIO.setup(motor_pins, GPIO.OUT)
 for i in range(TOTAL_MOTORS):
     motors.append(Motor(GPIO.PWM(motor_pins[i], 100)))
 
-motors = [GPIO.PWM(motor_pins[0], 100), GPIO.PWM(motor_pins[1], 100), GPIO.PWM(motor_pins[2], 100), GPIO.PWM(motor_pins[3], 100)]
-
 for motor in motors:
     motor.pin.start(0)
 
 for i in range(TOTAL_MOTORS):
     print("Motor " + i + " is vibrating")
-    motors[i].adjust_motor_vibration(0.2)
+    motors[i].update_strength(0.2)
     time.sleep(3)
-    motors[i].adjust_motor_vibration(MAX_DISTANCE)
+    motors[i].update_strength(MAX_DISTANCE)
     motors[i].pin.stop()
 
 GPIO.cleanup()
