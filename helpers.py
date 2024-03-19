@@ -23,11 +23,3 @@ def process_frame(depth_buf, amplitude_buf):
 #         motors[motor_index].ChangeDutyCycle(intensity)
 
 # Exponential distance strength adjustment
-def adjust_motor_vibration(distance, motors, motor_index):
-    if distance < 0.1:
-        motors[motor_index].ChangeDutyCycle(100)
-    elif distance > MAX_DISTANCE:
-        motors[motor_index].ChangeDutyCycle(0)
-    else:
-        intensity = (1 - (distance / MAX_DISTANCE)**2) * 100  # Convert to duty cycle (0-100%)
-        motors[motor_index].ChangeDutyCycle(intensity)
