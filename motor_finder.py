@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import sys
 
 from helpers import *
 from constants import *
@@ -20,3 +21,6 @@ for i in range(TOTAL_MOTORS):
     adjust_motor_vibration(0.2, motors, i)
     time.sleep(3)
     adjust_motor_vibration(MAX_DISTANCE, motors, i)
+    motors[i].stop()
+
+GPIO.cleanup()
