@@ -9,3 +9,9 @@ MIN_STRENGTH = 50
 ALERT_DISTANCE = 0.7
 Patterns = Enum('Patterns', ['PULSE', 'DOUBLE_TAP'])
 PULSE_DURATION = 0.2
+
+#Benchmarking
+TEST_TITLES = {
+    'startup': "Startup Time",
+    'response': "Response Time"
+}

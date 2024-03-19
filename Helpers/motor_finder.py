@@ -2,9 +2,9 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
-from helpers import *
+from Helpers.helpers import *
 from constants import *
-import Motor
+import Classes.Motor as Motor
 
 motor_pins = [26, 19, 13, 6]
 motors = []
