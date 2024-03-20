@@ -8,7 +8,7 @@ MIN_STRENGTH = 50
 # Patterned vibrations
 ALERT_DISTANCE = 0.7
 Patterns = Enum('Patterns', ['PULSE', 'DOUBLE_TAP'])
-PULSE_DURATION = 0.2
+PULSE_DURATION = 0.35
 DAMPEN_COEFFICIENT = 0.6 # Dampen stength of other motors when one is pulsing
 
 #Benchmarking

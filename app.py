@@ -83,10 +83,9 @@ class Project:
                     start_x = reverse_index * section_width
                     end_x = ((reverse_index + 1) * section_width)
                     section = depth_buf[:, start_x:end_x]
-                    section_depth = np.nanmean(np.where(section == 0, np.nan, section))
-                    self.motors[i].section_depth = section_depth
-                    self.motors[i].update_pattern(section_depth)
-                    self.motors[i].update_strength(section_depth)
+                    self.motors[i].section_depth = np.nanmean(np.where(section == 0, np.nan, section))
+                    self.motors[i].update_pattern()
+                    self.motors[i].update_strength()
                     pulsing_motor = pulsing_motor or self.motors[i].pattern is not None
                 
                 for i in range(TOTAL_MOTORS):
