@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
-from Helpers.helpers import *
+from helpers import *
 from constants import *
 import Classes.Motor as Motor
 

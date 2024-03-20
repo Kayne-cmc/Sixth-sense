@@ -26,15 +26,15 @@ class Motor:
             self.intensity = 0
 
     def update_strength(self, distance):
+        if self.pattern is not None:
+            return
+        
         intensity = 0
-        if distance <= ALERT_DISTANCE and self.pattern is None:
-            intensity = MAX_STRENGTH
-        elif distance > MAX_DISTANCE:
+        if distance > MAX_DISTANCE:
             intensity = 0
         else:
             intensity = (1 - (distance / MAX_DISTANCE)**2) * 100 # 0 - 100 intensity from a distance of 4m - 0m
-        self.pin.ChangeDutyCycle(intensity)
-        self.motor_intensity = intensity
+        self.intensity = intensity
 
     def update(self, distance):
         self.update_pattern(distance)

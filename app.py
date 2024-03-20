@@ -9,7 +9,7 @@ import threading
 from Helpers.helpers import *
 from constants import *
 from Classes.Motor import Motor
-from Benchmark import Benchmark
+from Classes.Benchmark import Benchmark
 
 class Project:
     def __init__(self, motor_pins, button_pin, benchmarking = False):
@@ -20,8 +20,7 @@ class Project:
         self.is_running = threading.Event()
         self.motors = []
         self.setup_components(motor_pins, button_pin)
-
-        
+   
     def setup_components(self, motor_pins, button_pin):
         if self.benchmarking:
             self.benchmark.start_test()
@@ -45,8 +44,7 @@ class Project:
         self.cam.setControl(ac.TOFControl.RANG,MAX_DISTANCE)
 
         if self.benchmarking:
-            self.benchmarking.end_test(TEST_TITLES['startup'])
-        self.benchmark.endtest()
+            self.benchmark.end_test(TEST_TITLES['startup'])
 
     def start_run(self):
         self.is_running.set()
@@ -133,6 +131,7 @@ class Project:
 if __name__ == "__main__":
     button_pin = 4
     motor_pins = [26, 19, 13, 6]
+    # project = Project(motor_pins, button_pin, benchmarking=True)
     project = Project(motor_pins, button_pin, benchmarking=True)
 
     try:

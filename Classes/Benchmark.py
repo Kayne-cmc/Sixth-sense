@@ -30,7 +30,7 @@ class Benchmark:
         
         self.end_time = time.time()
         time_difference =  self.end_time - self.start_time
-        empty_row = self.sheet[sheet_title].max_row + 1
+        empty_row = self.sheets[sheet_title].max_row + 1
         self.sheets[sheet_title].cell(row = empty_row, column = 1, value=self.start_time)
         self.sheets[sheet_title].cell(row = empty_row, column = 2, value=self.end_time)
         self.sheets[sheet_title].cell(row = empty_row, column = 3, value=time_difference)
