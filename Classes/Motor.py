@@ -7,6 +7,7 @@ class Motor:
         self.intensity = motor_intensity
         self.pattern = None
         self.start_time = None
+        self.section_depth = 0
 
     def update_pattern(self, distance):
         # Only need to set a pulsing vibration if withing ALERT_DISTANCE
@@ -33,10 +34,12 @@ class Motor:
         if distance > MAX_DISTANCE:
             intensity = 0
         else:
-            intensity = (1 - (distance / MAX_DISTANCE)**2) * 100 # 0 - 100 intensity from a distance of 4m - 0m
+            intensity = (1 - (distance / MAX_DISTANCE)) ** 2 * 100 # 0 - 100 intensity from a distance of 4m - 0m
         self.intensity = intensity
 
     def update(self, distance):
         self.update_pattern(distance)
         self.update_strength(distance)
+
+    def apply_updates(self):
         self.pin.ChangeDutyCycle(self.intensity)

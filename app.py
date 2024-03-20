@@ -74,25 +74,31 @@ class Project:
 
                 frame_height, frame_width = depth_buf.shape
                 section_width = frame_width // TOTAL_MOTORS
+
+                pulsing_motor = False
+
                 for i in range(TOTAL_MOTORS):
-                    start_x = i * section_width
-                    end_x = ((i + 1) * section_width) if (i < 4) else result_image.shape[1]
+                    # Update motor strengths
+                    reverse_index = TOTAL_MOTORS - i - 1 # Image is up side down, so the partitions are ordered right to left
+                    start_x = reverse_index * section_width
+                    end_x = ((reverse_index + 1) * section_width)
                     section = depth_buf[:, start_x:end_x]
                     section_depth = np.nanmean(np.where(section == 0, np.nan, section))
-                    # cv2.putText(result_image, f"{i}: {section_depth:.1f}m", (start_x + 10, frame_height//2), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1)
-                    self.motors[i].update(section_depth)
+                    self.motors[i].section_depth = section_depth
+                    self.motors[i].update_pattern(section_depth)
+                    self.motors[i].update_strength(section_depth)
+                    pulsing_motor = pulsing_motor or self.motors[i].pattern is not None
+                
+                for i in range(TOTAL_MOTORS):
+                    start_x = i * section_width
+                    end_x = ((i + 1) * section_width)
+                    if (pulsing_motor and self.motors[i].pattern is None):
+                        self.motors[i].intensity *= DAMPEN_COEFFICIENT
+                    self.motors[i].apply_updates()
 
-                    # Calculate the vibration intensity for visual representation
-                    if section_depth < 0.1 or section_depth > MAX_DISTANCE:
-                        color_intensity = 0  # Black for no vibration
-                    else:
-                        intensity = (1 - section_depth / MAX_DISTANCE) * 255  # Scale from 0 (no vibration) to 255 (max vibration)
-                        color_intensity = int(intensity)
-                    
-                    # Simulate vibration by pulsating color intensity
+                    cv2.putText(result_image, f"{self.motors[i].section_depth:.1f}m", (start_x + 10, frame_height//2), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 175, 80), 1)
+                    color_intensity = int(self.motors[i].intensity / 100 * 255)
                     rectangle_color = (color_intensity, color_intensity, color_intensity)  # Grayscale intensity
-
-                    # Draw rectangle with calculated color
                     cv2.rectangle(result_image, (start_x, 0), (end_x, 20), rectangle_color, -1)  # Fixed height, color changes
 
                 cv2.imshow("preview", result_image)
@@ -132,7 +138,7 @@ if __name__ == "__main__":
     button_pin = 4
     motor_pins = [26, 19, 13, 6]
     # project = Project(motor_pins, button_pin, benchmarking=True)
-    project = Project(motor_pins, button_pin, benchmarking=True)
+    project = Project(motor_pins, button_pin, benchmarking=False)
 
     try:
         while True:
